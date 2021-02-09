@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Feb  9 14:37:49 2021
+Availabel in: https://github.com/felipefr/galerkinML_EAMC2021.git
+@author: Felipe Figueredo Rocha, f.rocha.felipe@gmail.com
+"""
+
 import os, sys
 import tensorflow as tf
 os.environ['KMP_DUPLICATE_LIB_OK']='True'

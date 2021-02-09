@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Feb  9 14:37:49 2021
+Availabel in: https://github.com/felipefr/galerkinML_EAMC2021.git
+@author: Felipe Figueredo Rocha, f.rocha.felipe@gmail.com
+"""
+
 from dolfin import *
 import matplotlib.pyplot as plt
 

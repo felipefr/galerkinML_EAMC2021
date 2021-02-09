@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Feb  9 14:37:49 2021
+Availabel in: https://github.com/felipefr/galerkinML_EAMC2021.git
+@author: Felipe Figueredo Rocha, f.rocha.felipe@gmail.com
+"""
+
 from dolfin import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,11 +51,10 @@ class poissonProblem:
         solve(self.a == self.b, uh, self.bc)        
         return uh
 
+# Generation Training or test
 Nx = 50
 
 param_limit = [[-0.9,0.9],[-0.435,0.435]]
-
-
 np.random.seed(9)
 Ns = 1000
 Np = len(param_limit)
@@ -56,9 +63,7 @@ param = np.random.rand(Ns,Np)
 for i in range(Np):
     param[:,i] = param_limit[i][0] + (param_limit[i][1] - param_limit[i][0])*param[:,i]  
 
-
 poisson = poissonProblem(Nx)
-
 S = np.zeros((Ns,poisson.Uh.dim()))
 
 for i in range(Ns):
@@ -73,19 +78,22 @@ plt.scatter(param[:,0],param[:,1])
 plt.xlabel('delta 1')
 plt.ylabel('delta 2')
 
+# RB generation : Using SVD it's equivalent to the version in the slide with one takes C = S@S^T 
 U,sig,VT = np.linalg.svd(S, full_matrices=False)  
    
 V = VT.transpose()[:,:250]
 SR = S@V
 
+# RElative error POD
 plt.figure(2)
 plt.plot(np.arange(1,101),  1 - np.cumsum(sig*sig)[0:100]/np.sum(sig*sig), '-o')
 plt.xlabel('N')
 plt.ylabel('Error POD relative')
 plt.yscale('log')
 
-errorMSE = np.zeros(1000)
-for i in range(1000):
+# MSE error POD
+errorMSE = np.zeros(Ns)
+for i in range(Ns):
     errorMSE[i] = np.sum(sig[i:]*sig[i:])/Ns
 
 plt.figure(3)
@@ -94,7 +102,7 @@ plt.xlabel('N')
 plt.ylabel('Error POD mse')
 plt.yscale('log')
 
-
+# Saving in hd5 files
 myhd.savehd5('train.hd5', [S,param], ['u','param'], 'w')
 # myhd.savehd5('test.hd5', [S,param], ['u','param'], 'w')
 myhd.savehd5('basis.hd5', [V,SR,sig], ['basis','projections','sigma'], 'w-')
